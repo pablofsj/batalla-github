@@ -1,7 +1,11 @@
 <template>
   <div class="row">
     <div class="col s12 m12">
-      <h4>Username : <span>{{username}}</span></h4>
+      <h4>Username : <input v-model="username"  @keyup.enter="cargar_usuario" type="text" placeholder="Enter the Github username"></h4>
+      <button @click="cargar_usuario" class="btn waves-effect black" type="submit" name="action">Search
+      <i class="material-icons right">arrow_downward</i>
+      </button>
+      <br>
       <br>
       <table class="striped bordered">
         <tbody>
@@ -44,8 +48,10 @@ export default {
       total: 0
     }
   },
-  mounted() {
-    this.axios.get('https://api.github.com/users/pablofsj')
+
+  methods: {
+    cargar_usuario() {
+    this.axios.get(`https://api.github.com/users/${this.username}`)
     .then((datos) => {
       const github = datos.data;
       this.username = github.login;
@@ -59,7 +65,9 @@ export default {
     .catch((error) => {
       alert(error);
     });
+   }
   }
+  
 }
 
 </script>
@@ -77,6 +85,9 @@ a {
 }
 
 table{
+  font-size: 20px;
+}
+input{
   font-size: 20px;
 }
 
