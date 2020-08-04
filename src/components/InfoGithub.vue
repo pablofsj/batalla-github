@@ -84,19 +84,8 @@ export default {
     })
     
     .catch((error) => {
-      console.log(`Something went wrong: ${error}`);
-        if (error.response) {
-            // here, you may want to drill even further to handle 400 and 500 level errors differently
-            alert('Ups, you have entered a non-existent user of Github');
-        }
-        else if (error.request) {
-            // this will only be reached if the request didn't ever receive a response
-            alert(`Ups, the request didn't ever receive a response from Github`);
-        }
-        else {
-            // something in the setup of the request triggered an error
-            alert('Ups, wrong request');
-        }
+      console.log(error);
+      alert('Ups, you have entered a non-existent user of Github');
     });
    }
   }
