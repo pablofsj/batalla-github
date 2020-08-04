@@ -4,10 +4,19 @@
       <div class="row">
         <div class="col m12 s12">
           <h2>Welcome to GitHub Battle</h2>
-          <h4>Player One</h4>
         </div>
       </div>
-      <InfoGithub/>
+      <div class="row">
+        <InfoGithub :num_jugador='1'/>
+        <InfoGithub :num_jugador='2'/>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col m12 s12">
+          <button @click='comparaPuntajes()' class="btn waves-effect black btn-large" type="submit" name="action">Battle!</button>
+        </div>
+      </div>
+      <br> 
     </div> 
   </div>
 </template>
@@ -19,7 +28,22 @@ export default {
   name: 'App',
   components: {
     InfoGithub
+  },
+
+  methods: {
+    comparaPuntajes(){
+      if(this.$store.state.puntaje1 > this.$store.state.puntaje2 ){
+        alert(`The first player has won with a score of ${this.$store.state.puntaje1} `)
+      }
+      else if(this.$store.state.puntaje1 < this.$store.state.puntaje2){
+        alert(`The second player has won with a score of ${this.$store.state.puntaje2} `)
+      }
+      else {
+        alert('The players have tied')
+      }
+   } 
   }
+
 }
 </script>
 

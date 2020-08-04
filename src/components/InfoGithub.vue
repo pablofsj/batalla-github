@@ -1,56 +1,59 @@
 <template>
-  <div class="row">
-    <div class="col s12 m12">
-      <h5 id="usernametitle">Username : <input v-model="username"  @keyup.enter="cargar_usuario" type="text" placeholder="Enter the Github username"></h5>
-      <button @click="cargar_usuario" class="btn waves-effect black" type="submit" name="action">Search
-      <i class="material-icons right">arrow_downward</i>
-      </button>
-      <br>
-      <br>
-      <h5>{{usernametable}}</h5>
-      <img :src= profile_image alt="">
-      <br>
-      <br>
-      <table class="striped">
-        <tbody>
-          <tr>
-            <td>Public Repos</td>
-            <td>{{public_repos}}</td>
-          </tr>
-          <tr>
-            <td>Number of Followers</td>
-            <td>{{followers}}</td>
-          </tr>
-          <tr>
-            <td>Number Following</td>
-            <td>{{following}}</td>
-          </tr>
-          <tr>
-            <td>Public Gists</td>
-            <td>{{gists}}</td>
-          </tr>
-          <tr>
-            <td><b>Total Score</b></td>
-            <td><b>{{total}}</b></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>   
-  </div>
+  <div class="col s12 m6">
+    <h5 id="usernametitle">Username : <input v-model="username"  @keyup.enter="cargar_usuario" type="text" placeholder="Enter the Github username"></h5>
+    <button @click="cargar_usuario" class="btn waves-effect black" type="submit" name="action">Search
+    <i class="material-icons right">arrow_downward</i>
+    </button>
+    <br>
+    <br>
+    <h5>{{usernametable}}</h5>
+    <img :src= profile_image alt="">
+    <br>
+    <br>
+    <table class="striped">
+      <tbody>
+        <tr>
+          <td>Public Repos</td>
+          <td>{{public_repos}}</td>
+        </tr>
+        <tr>
+          <td>Number of Followers</td>
+          <td>{{followers}}</td>
+        </tr>
+        <tr>
+          <td>Number Following</td>
+          <td>{{following}}</td>
+        </tr>
+        <tr>
+          <td>Public Gists</td>
+          <td>{{gists}}</td>
+        </tr>
+        <tr>
+          <td><b>Total Score</b></td>
+          <td><b>{{total}}</b></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>   
 </template>
 
 <script>
 export default {
   name: 'InfoGithub',
+  props:{
+    num_jugador: Number
+  },
   data() {
     return {
+      isLoading: false,
       profile_image:'https://imageog.flaticon.com/icons/png/512/25/25231.png?size=1200x630f&pad=10,10,10,10&ext=png&bg=FFFFFFFF',
       username:'',
       public_repos: 0,
       followers: 0,
       following: 0,
       gists: 0,
-      total: 0
+      total: 0,
+      usernametable: ''
     }
   },
 
@@ -66,11 +69,34 @@ export default {
       this.followers = github.followers;
       this.following = github.following;
       this.gists = github.public_gists;
-      this.total = (this.public_repos + this.followers + this.following + this.gists)
+      this.total = (this.public_repos + this.followers + this.following + this.gists);
+      if(this.num_jugador == 1){
+        console.log('soy el number guan');
+        let puntajetotal=this.total;
+        this.$store.commit('puntaje1',puntajetotal);  
+      }
+      else{
+        console.log('soy el number tu');
+        let puntajetotal=this.total;
+        this.$store.commit('puntaje2',puntajetotal); 
+      }
 
     })
+    
     .catch((error) => {
-      alert(error);
+      console.log(`Something went wrong: ${error}`);
+        if (error.response) {
+            // here, you may want to drill even further to handle 400 and 500 level errors differently
+            alert('Ups, you have entered a non-existent user of Github');
+        }
+        else if (error.request) {
+            // this will only be reached if the request didn't ever receive a response
+            alert(`Ups, the request didn't ever receive a response from Github`);
+        }
+        else {
+            // something in the setup of the request triggered an error
+            alert('Ups, wrong request');
+        }
     });
    }
   }
